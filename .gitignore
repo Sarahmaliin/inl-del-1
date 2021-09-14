@@ -1,6 +1,7 @@
 package-lock.json
 node_modules
 package.json
+secrets/
 
 # Logs
 logs
