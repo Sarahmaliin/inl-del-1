@@ -3,6 +3,8 @@ node_modules
 package.json
 secrets/
 
+DS_Store
+
 # Logs
 logs
 *.log
