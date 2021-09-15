@@ -14,7 +14,7 @@ router.get('/', async (req, res) =>{ //array
 })
 
 router.get('/:id', async (req, res)=>{ //Id
-    const idUser = await getOneHamster(req.params.id)
+    const idUser = await getOneHamster(req.params.id) //får tillbaka id från funktionen
     if(!idUser){
         res.status(404).send('wrong id')
         return
@@ -22,8 +22,38 @@ router.get('/:id', async (req, res)=>{ //Id
     res.send(idUser)    
 })
 
+// router.put('/:id', async (req, res) =>{
+//     const updateArray = await HamsterObject(req.params.id)
+//     if(!updateArray){
+//         res.status(400)
+//     }
+//     res.status(200).send(updateArray)
+// })
 
-//functions
+router.delete('/:id', async (req, res) =>{
+let deleted = await deleteOne(req.params.id)
+if(!deleted){
+    res.status(400)
+}
+res.send(deleted)
+})
+
+
+
+// //functions
+
+// async function HamsterObject(id){
+//     console.log('updating one document')
+//     const docId = id
+
+//     console.log(docId)
+    
+//     const UpdateData = {
+//         age: 200
+//     }
+//     const settings = { merge: true}
+//     await db.collection(HAMSTERS).doc(docId).set(UpdateData, settings)
+// }
 
 async function getHamsters(){
     const userRef = db.collection(HAMSTERS)
@@ -44,8 +74,8 @@ async function getHamsters(){
 
 
 async function getOneHamster(id) {
-    const docRef = db.collection(HAMSTERS).doc(id)
-    const docSnapshot = await docRef.get()
+    const docRef = db.collection(HAMSTERS).doc(id) // hämta databasobjektet med id från parameter
+    const docSnapshot = await docRef.get() //
     if( docSnapshot.exists ) {
         return await docSnapshot.data()
     }else{
@@ -53,6 +83,21 @@ async function getOneHamster(id) {
         return null
     }
 }
+
+async function deleteOne(id) {
+    console.log('Deleting a document...');
+    const docId = id
+
+	const docRef = db.collection(HAMSTERS).doc(docId)
+	const docSnapshot = await docRef.get()
+	console.log('Document exists? ', docSnapshot.exists);
+	const result = await docRef.delete()
+}
+
+// async function updateHamster(id, object){
+//     const docRef = db.collection(HAMSTERS).doc(id)
+//     docRef.set(object)
+// }
 
 
 
