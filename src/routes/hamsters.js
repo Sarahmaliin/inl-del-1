@@ -6,14 +6,20 @@ const connect = database.connect
 const db = connect()
 const HAMSTERS = 'hamsters'
 
-router.get('/', async (req, res) =>{
+console.log(db.collection(HAMSTERS).get())
+
+router.get('/', async (req, res) =>{ //array
     let array = await getHamsters()
     res.send(array)
 })
 
-router.get('/:id', async (req, res)=>{
+router.get('/:id', async (req, res)=>{ //Id
     const idUser = await getOneHamster(req.params.id)
-    res.send(idUser)
+    if(!idUser){
+        res.status(404).send('wrong id')
+        return
+    }
+    res.send(idUser)    
 })
 
 
