@@ -13,7 +13,12 @@ router.get('/', async (req, res) =>{
 
 router.get('/:id', async (req, res)=>{
     const idUser = await getOneHamster(req.params.id)
+    if(!idUser){
+        res.status(404).send('wrong id')
+        return
+    }
     res.send(idUser)
+    
 })
 
 
