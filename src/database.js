@@ -1,6 +1,6 @@
 var admin = require("firebase-admin");
 
-var serviceAccount = require("./src/secrets/secret.json");
+var serviceAccount = require("./secrets/secret.json");
 
 function connect() {
     admin.initializeApp({
