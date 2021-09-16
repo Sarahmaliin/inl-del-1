@@ -13,6 +13,17 @@ router.get('/', async (req, res) =>{ //array
     res.send(array)
 })
 
+router.get('/random', async (req, res) =>{ //GET random
+    let randomArray = await getHamsters()
+    console.log(randomArray.length)
+
+    let index = Math.floor(Math.random() * randomArray.length)
+    let randomHamster = randomArray[index]
+
+    console.log(randomHamster)
+    res.send(randomHamster)
+})
+
 router.get('/:id', async (req, res)=>{ //Id
     const idUser = await getOneHamster(req.params.id) //får tillbaka id från funktionen
     if(!idUser){
@@ -22,13 +33,14 @@ router.get('/:id', async (req, res)=>{ //Id
     res.send(idUser)    
 })
 
-// router.put('/:id', async (req, res) =>{
-//     const updateArray = await HamsterObject(req.params.id)
-//     if(!updateArray){
-//         res.status(400)
-//     }
-//     res.status(200).send(updateArray)
-// })
+
+ router.put('/:id', async (req, res) =>{ //PUT - OBS! ÄNDRAR MEN MÅSTE KORRIGERA STATUSKODEN
+     const updateArray = await HamsterObject(req.params.id)
+     if(!updateArray){
+         res.status(400)
+     }
+     res.status(200).send(updateArray)
+})
 
 router.delete('/:id', async (req, res) =>{
 let deleted = await deleteOne(req.params.id)
@@ -40,20 +52,20 @@ res.send(deleted)
 
 
 
-// //functions
+//functions
 
-// async function HamsterObject(id){
-//     console.log('updating one document')
-//     const docId = id
+async function HamsterObject(id){
+    console.log('updating one document')
+    const docId = id
 
-//     console.log(docId)
+    console.log(docId)
     
-//     const UpdateData = {
-//         age: 200
-//     }
-//     const settings = { merge: true}
-//     await db.collection(HAMSTERS).doc(docId).set(UpdateData, settings)
-// }
+     const UpdateData = {
+        age: 3
+     }
+     const settings = { merge: true}
+     await db.collection(HAMSTERS).doc(docId).set(UpdateData, settings)
+ }
 
 async function getHamsters(){
     const userRef = db.collection(HAMSTERS)
@@ -94,10 +106,10 @@ async function deleteOne(id) {
 	const result = await docRef.delete()
 }
 
-// async function updateHamster(id, object){
-//     const docRef = db.collection(HAMSTERS).doc(id)
-//     docRef.set(object)
-// }
+ async function updateHamster(id, object){
+     const docRef = db.collection(HAMSTERS).doc(id)
+     docRef.set(object)
+}
 
 
 
