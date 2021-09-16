@@ -43,11 +43,11 @@ router.get('/:id', async (req, res)=>{ //Id
 })
 
 router.delete('/:id', async (req, res) =>{
-let deleted = await deleteOne(req.params.id)
-if(!deleted){
-    res.status(400)
-}
-res.send(deleted)
+    let deleted = await deleteOne(req.params.id)
+    if(!deleted ){
+        res.status(400)
+    }
+    res.send(deleted)
 })
 
 
@@ -97,13 +97,17 @@ async function getOneHamster(id) {
 }
 
 async function deleteOne(id) {
-    console.log('Deleting a document...');
-    const docId = id
 
-	const docRef = db.collection(HAMSTERS).doc(docId)
+	const docRef = db.collection(HAMSTERS).doc(id)
 	const docSnapshot = await docRef.get()
-	console.log('Document exists? ', docSnapshot.exists);
-	const result = await docRef.delete()
+    console.log(docSnapshot.exists)
+    if(docSnapshot.exists){
+        console.log('Document exists? ', docSnapshot.exists);
+	    const result = await docRef.delete()
+        return result
+    }
+    return null
+	
 }
 
  async function updateHamster(id, object){
