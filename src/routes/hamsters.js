@@ -34,12 +34,17 @@ router.get('/:id', async (req, res)=>{ //Id
 })
 
 
- router.put('/:id', async (req, res) =>{ //PUT - OBS! ÄNDRAR MEN MÅSTE KORRIGERA STATUSKODEN
+ router.put('/:id', async (req, res) =>{ 
      const updateArray = await HamsterObject(req.params.id)
      if(!updateArray){
-         res.status(400)
+         console.log('inside 400 code')
+         res.sendStatus(400)
+     } else{
+        console.log('inside 200 code')
+        res.sendStatus(200)
+        return
      }
-     res.status(200).send(updateArray)
+     
 })
 
 router.delete('/:id', async (req, res) =>{
@@ -54,17 +59,24 @@ router.delete('/:id', async (req, res) =>{
 
 //functions
 
-async function HamsterObject(id){
+async function HamsterObject(id){ //if else docsnapchat - se delete
     console.log('updating one document')
-    const docId = id
-
-    console.log(docId)
     
      const UpdateData = {
         age: 3
      }
-     const settings = { merge: true}
-     await db.collection(HAMSTERS).doc(docId).set(UpdateData, settings)
+
+    const docRef = db.collection(HAMSTERS).doc(id) // hämta databasobjektet med id från parameter
+    const docSnapshot = await docRef.get() //
+    if( docSnapshot.exists ) {
+        const settings = { merge: true}
+        return await db.collection(HAMSTERS).doc(id).set(UpdateData, settings)
+    }else{
+        console.log('nothing to see')
+        return null
+    }
+
+     
  }
 
 async function getHamsters(){
@@ -103,8 +115,8 @@ async function deleteOne(id) {
     console.log(docSnapshot.exists)
     if(docSnapshot.exists){
         console.log('Document exists? ', docSnapshot.exists);
-	    const result = await docRef.delete()
-        return result
+	    await docRef.delete()
+        return 
     }
     return null
 	
