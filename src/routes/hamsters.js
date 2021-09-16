@@ -27,10 +27,10 @@ router.get('/random', async (req, res) =>{ //GET random
 router.get('/:id', async (req, res)=>{ //Id
     const idUser = await getOneHamster(req.params.id) //får tillbaka id från funktionen
     if(!idUser){
-        res.status(404).send('wrong id')
+        res.sendStatus(404)
         return
     }
-    res.send(idUser)    
+    res.sendStatus(200)    
 })
 
 
@@ -50,16 +50,16 @@ router.get('/:id', async (req, res)=>{ //Id
 router.delete('/:id', async (req, res) =>{
     let deleted = await deleteOne(req.params.id)
     if(!deleted ){
-        res.status(400)
+        res.sendStatus(400)
     }
-    res.send(deleted)
+    res.sendStatus(200)
 })
 
 
 
 //functions
 
-async function HamsterObject(id){ //if else docsnapchat - se delete
+async function HamsterObject(id){ 
     console.log('updating one document')
     
      const UpdateData = {
@@ -98,7 +98,7 @@ async function getHamsters(){
 
 
 async function getOneHamster(id) {
-    const docRef = db.collection(HAMSTERS).doc(id) // hämta databasobjektet med id från parameter
+    const docRef = db.collection(HAMSTERS).doc(id) 
     const docSnapshot = await docRef.get() //
     if( docSnapshot.exists ) {
         return await docSnapshot.data()
@@ -112,7 +112,6 @@ async function deleteOne(id) {
 
 	const docRef = db.collection(HAMSTERS).doc(id)
 	const docSnapshot = await docRef.get()
-    console.log(docSnapshot.exists)
     if(docSnapshot.exists){
         console.log('Document exists? ', docSnapshot.exists);
 	    await docRef.delete()
