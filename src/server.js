@@ -1,0 +1,24 @@
+const express = require('express')
+const app = express()
+const PORT = 5555;
+const hamsterRouter = require('./routes/hamsters.js')
+
+
+app.use( express.urlencoded({ extended: true }) )
+app.use( express.json() )
+app.use((req, res, next) => {
+	console.log(`${req.method}  ${req.url}`, req.body);
+	next()
+})
+
+app.get('/index', (req, res) =>{
+	res.sendFile(__dirname + '/public/index.html')
+})
+
+//routes/endpoints
+
+app.use('/hamsters', hamsterRouter)
+
+app.listen(PORT, () =>{
+    console.log(`listening on port ${PORT}`)
+})

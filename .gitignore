@@ -1,6 +1,9 @@
 package-lock.json
 node_modules
 package.json
+secrets/
+
+DS_Store
 
 # Logs
 logs
