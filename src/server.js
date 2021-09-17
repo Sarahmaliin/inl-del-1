@@ -11,6 +11,8 @@ app.use((req, res, next) => {
 	next()
 })
 
+app.use(express.static(__dirname + '/public'))
+
 app.get('/index', (req, res) =>{
 	res.sendFile(__dirname + '/public/index.html')
 })
