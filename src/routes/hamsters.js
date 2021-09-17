@@ -6,8 +6,6 @@ const connect = database.connect
 const db = connect()
 const HAMSTERS = 'hamsters'
 
-console.log(db.collection(HAMSTERS).get())
-
 router.get('/', async (req, res) =>{ //array
     let array = await getHamsters()
     res.send(array)
@@ -39,13 +37,11 @@ router.get('/:id', async (req, res)=>{ //Id
 })
 
 
- router.put('/:id', async (req, res) =>{ 
+ router.put('/:id', async (req, res) =>{ //ok med statuscode, korrigeras?
      const updateArray = await HamsterObject(req.params.id)
      if(!updateArray){
-         console.log('inside 400 code')
-         res.sendStatus(400)
+         res.sendStatus(404)
      } else{
-        console.log('inside 200 code')
         res.sendStatus(200)
         return
      }
@@ -55,10 +51,13 @@ router.get('/:id', async (req, res)=>{ //Id
 router.delete('/:id', async (req, res) =>{ //deletear men får statuskod 400 ändå
     let deleted = await deleteOne(req.params.id)
     if(!deleted ){
-        res.sendStatus(400)
-    }
-    res.send()
-    return
+        console.log('inside 404 code')
+        res.sendStatus(404)
+        return
+    }else{
+        console.log('inside 200 code')
+        res.sendStatus(200)
+    }    
 })
 
 
@@ -114,16 +113,17 @@ async function getOneHamster(id) {
     }
 }
 
-async function deleteOne(id) { //får error, vrf??
+async function deleteOne(id) { //funkar!
 
 	const docRef = db.collection(HAMSTERS).doc(id)
 	const docSnapshot = await docRef.get()
     if(docSnapshot.exists){
         console.log('Document exists? ', docSnapshot.exists);
-	    await docRef.delete()
-        return 
+	    return await docRef.delete()
+    }else{
+        return null
     }
-    return null
+    
 	
 }
 
@@ -135,14 +135,20 @@ async function getCutest() {
     }
         let cutest = [];
         for (let i = 0; i < array.length; i++){ //loopa igenom array, ta ut obj till min array
-        cutest[i] = array[i].wins; //returns all objects w array[i], .wins returns number of wins
-    }
-    
-    let finalResult = Math.max(...cutest) // får ut högsta talet här på wins.
-    console.log(finalResult)
+        cutest[i] = array[i].wins; //returnera värde på wins i alla obj
 
-    //Leta sen upp vilken obj i array som matchar med resultatet på wins??
-     return 
+    }
+        let finalResult = Math.max(...cutest) // får ut högsta talet här på wins.
+        let wins = array.find(({wins}) => wins === finalResult) //hittar värde i wins i array som har samma värde som högst resultat
+        
+        if(wins){
+                console.log(wins)
+                return wins
+            }else{
+                console.log('can not find it')
+                return null
+                
+            }
 }
 
-module.exports = router
+module.exports = router, getHamsters
