@@ -60,6 +60,12 @@ router.delete('/:id', async (req, res) =>{ //deletear men får statuskod 400 än
     }    
 })
 
+router.post('/', async (req, res) =>{
+    let item = req.body
+    let newHamster = await addOne(item)
+    res.send(newHamster)
+})
+
 
 
 //functions
@@ -133,28 +139,9 @@ async function getCutest() {
     if(array.empty){
         return []
     }
-    //     for(hamster in array){
-    //         // console.log(` checking for wins/losses line 138: ${array[hamster].wins}, ${array[hamster].defeats}`)
-            
-    //         let wins = array[hamster].wins
-    //         let def = array[hamster].defeats
-            
-    //         let calc = wins % def
-    //         let winner = calc
-    //         console.log(winner)
-    //         //om vinnande finns i array ska den skrivas ut, annars null
-    //         //calc + def = wins som finns i array
-    //     if(calc){
-    //         console.log('Yay!')
-    //     }else{
-    //         console.groupCollapsed('nay!')
-    //     }
-    // }
-        
-
+    
         //räkna ut skillnad wins/losses per objekt i array resultat
         let wins;
-        let def;
         let cutest = [];
         for (let i = 0; i < array.length; i++){ //loopa igenom array, ta ut obj till min array
             
@@ -182,6 +169,14 @@ async function getCutest() {
                 return null
                 
             }
+}
+
+async function addOne(item){
+        console.log('Add a new document...');
+        const object = item
+    
+        const docRef = await db.collection(HAMSTERS).add(object)
+        console.log('Added document with the id ' + docRef.id);
 }
 
 module.exports = router, getHamsters
