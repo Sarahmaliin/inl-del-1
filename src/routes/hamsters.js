@@ -60,6 +60,12 @@ router.delete('/:id', async (req, res) =>{ //deletear men får statuskod 400 än
     }    
 })
 
+router.post('/', async (req, res) =>{
+    let item = req.body
+    let newHamster = await addOne(item)
+    res.send(newHamster)
+})
+
 
 
 //functions
@@ -133,22 +139,44 @@ async function getCutest() {
     if(array.empty){
         return []
     }
+    
+        //räkna ut skillnad wins/losses per objekt i array resultat
+        let wins;
         let cutest = [];
         for (let i = 0; i < array.length; i++){ //loopa igenom array, ta ut obj till min array
-        cutest[i] = array[i].wins; //returnera värde på wins i alla obj
+            
+            let wins = array[i].wins
+            let def = array[i].defeats
+            // console.log(def, wins)
 
+            let calcit = wins / def
+            let multi =  calcit * def 
+            //console.log(calcit, multi)
+            if(isNaN(multi)) multi = 0; //omvandlar alla NaN till 0, om ex ej har vunnit/förlorat ngt
+            cutest[i] = multi; //returnera värde på wins i alla obj
     }
+        //console.log(cutest)
         let finalResult = Math.max(...cutest) // får ut högsta talet här på wins.
-        let wins = array.find(({wins}) => wins === finalResult) //hittar värde i wins i array som har samma värde som högst resultat
+        //console.log(finalResult)
         
-        if(wins){
+        let winning = array.find(({wins}) => wins === finalResult) //hittar värde array som har samma värde som högst resultat
+        
+        if(winning){
                 console.log(wins)
-                return wins
+                return winning
             }else{
                 console.log('can not find it')
                 return null
                 
             }
+}
+
+async function addOne(item){
+        console.log('Add a new document...');
+        const object = item
+    
+        const docRef = await db.collection(HAMSTERS).add(object)
+        console.log('Added document with the id ' + docRef.id);
 }
 
 module.exports = router, getHamsters
