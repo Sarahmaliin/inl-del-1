@@ -38,7 +38,11 @@ router.get('/:id', async (req, res)=>{ //Id
 
 
  router.put('/:id', async (req, res) =>{ //ok med statuscode, korrigeras?
-     const updateArray = await HamsterObject(req.params.id)
+     let item = req.body
+     const updateArray = await HamsterObject(req.params.id,item)
+    
+     
+
      if(!updateArray){
          res.sendStatus(404)
      } else{
@@ -70,12 +74,10 @@ router.post('/', async (req, res) =>{
 
 //functions
 
-async function HamsterObject(id){ 
+async function HamsterObject(id, item){ 
     console.log('updating one document')
-    
-     const UpdateData = {
-        wins: 3
-     }
+    const object = item
+     const UpdateData = object
 
     const docRef = db.collection(HAMSTERS).doc(id) // hämta databasobjektet med id från parameter
     const docSnapshot = await docRef.get() //
