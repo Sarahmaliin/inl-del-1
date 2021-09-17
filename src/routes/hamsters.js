@@ -133,17 +133,50 @@ async function getCutest() {
     if(array.empty){
         return []
     }
+    //     for(hamster in array){
+    //         // console.log(` checking for wins/losses line 138: ${array[hamster].wins}, ${array[hamster].defeats}`)
+            
+    //         let wins = array[hamster].wins
+    //         let def = array[hamster].defeats
+            
+    //         let calc = wins % def
+    //         let winner = calc
+    //         console.log(winner)
+    //         //om vinnande finns i array ska den skrivas ut, annars null
+    //         //calc + def = wins som finns i array
+    //     if(calc){
+    //         console.log('Yay!')
+    //     }else{
+    //         console.groupCollapsed('nay!')
+    //     }
+    // }
+        
+
+        //räkna ut skillnad wins/losses per objekt i array resultat
+        let wins;
+        let def;
         let cutest = [];
         for (let i = 0; i < array.length; i++){ //loopa igenom array, ta ut obj till min array
-        cutest[i] = array[i].wins; //returnera värde på wins i alla obj
+            
+            let wins = array[i].wins
+            let def = array[i].defeats
+            // console.log(def, wins)
 
+            let calcit = wins / def
+            let multi =  calcit * def 
+            //console.log(calcit, multi)
+            if(isNaN(multi)) multi = 0; //omvandlar alla NaN till 0, om ex ej har vunnit/förlorat ngt
+            cutest[i] = multi; //returnera värde på wins i alla obj
     }
+        //console.log(cutest)
         let finalResult = Math.max(...cutest) // får ut högsta talet här på wins.
-        let wins = array.find(({wins}) => wins === finalResult) //hittar värde i wins i array som har samma värde som högst resultat
+        //console.log(finalResult)
         
-        if(wins){
+        let winning = array.find(({wins}) => wins === finalResult) //hittar värde array som har samma värde som högst resultat
+        
+        if(winning){
                 console.log(wins)
-                return wins
+                return winning
             }else{
                 console.log('can not find it')
                 return null
