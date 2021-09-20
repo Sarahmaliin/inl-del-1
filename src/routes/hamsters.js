@@ -52,22 +52,42 @@ router.get('/:id', async (req, res)=>{ //Id
      
 })
 
-router.delete('/:id', async (req, res) =>{ //deletear men får statuskod 400 ändå
+router.delete('/:id', async (req, res) =>{ 
     let deleted = await deleteOne(req.params.id)
     if(!deleted ){
-        console.log('inside 404 code')
         res.sendStatus(404)
         return
     }else{
-        console.log('inside 200 code')
         res.sendStatus(200)
     }    
 })
 
+function checkHamster(item){
+    if((typeof item ) !== 'object'){
+        return false
+    }
+
+    let keys = Object.keys(item)
+    if(!keys.includes('name') || !keys.includes('age') || !keys.includes('favFood') || !keys.includes('loves') || !keys.includes('imgName') || !keys.includes('wins') || !keys.includes('defeats') || !keys.includes('games')){
+        return false
+    }
+
+    return true
+
+}
 router.post('/', async (req, res) =>{
     let item = req.body
-    let newHamster = await addOne(item)
-    res.send(newHamster)
+    let HamsterItem = checkHamster(item)
+
+    if(!HamsterItem){               
+        res.status(400).send('Must send a hamster object')
+        return
+        
+    } else{
+        let newHamster = await addOne(item)
+        res.send(newHamster)
+    }
+    
 })
 
 
@@ -172,6 +192,8 @@ async function getCutest() {
                 
             }
 }
+
+
 
 async function addOne(item){
         console.log('Add a new document...');
