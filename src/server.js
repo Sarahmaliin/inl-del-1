@@ -13,23 +13,6 @@ app.use((req, res, next) => {
 
 app.use(express.static(__dirname + '/public'))
 
-app.get('/index', (req, res) =>{
-	console.log(hamsterRouter)
-	res.sendFile(__dirname + '/public/index.html')
-})
-
-app.get('/style', (req, res) =>{
-	res.sendFile(__dirname + '/public/style.css')
-})
-
-app.get('/indexjs', (req, res) =>{
-	res.sendFile(__dirname + '/public/index.js')
-})
-
-app.get('/img/:id', (req, res) =>{
-	res.sendFile(__dirname + '/public/img')
-})
-
 //routes/endpoints
 
 app.use('/hamsters', hamsterRouter)
