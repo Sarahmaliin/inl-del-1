@@ -11,14 +11,11 @@ router.get('/', async (req, res) =>{ //array
     res.send(array)
 })
 
-router.get('/random', async (req, res) =>{ //GET random
+router.get('/random', async (req, res) =>{
     let randomArray = await getHamsters()
-    console.log(randomArray.length)
-
     let index = Math.floor(Math.random() * randomArray.length)
     let randomHamster = randomArray[index]
 
-    console.log(randomHamster)
     res.send(randomHamster)
 })
 
@@ -36,12 +33,9 @@ router.get('/:id', async (req, res)=>{ //Id
     res.sendStatus(200)    
 })
 
-
- router.put('/:id', async (req, res) =>{ //ok med statuscode, korrigeras?
+ router.put('/:id', async (req, res) =>{ 
      let item = req.body
      const updateArray = await HamsterObject(req.params.id,item)
-    
-     
 
      if(!updateArray){
          res.sendStatus(404)
@@ -97,15 +91,14 @@ router.post('/', async (req, res) =>{
 async function HamsterObject(id, item){ 
     console.log('updating one document')
     const object = item
-     const UpdateData = object
-
+    const UpdateData = object
     const docRef = db.collection(HAMSTERS).doc(id) // hämta databasobjektet med id från parameter
-    const docSnapshot = await docRef.get() //
+    const docSnapshot = await docRef.get()
+
     if( docSnapshot.exists ) {
         const settings = { merge: true}
         return await db.collection(HAMSTERS).doc(id).set(UpdateData, settings)
     }else{
-        console.log('nothing to see')
         return null
     }
 
@@ -132,21 +125,20 @@ async function getHamsters(){
 
 async function getOneHamster(id) {
     const docRef = db.collection(HAMSTERS).doc(id) 
-    const docSnapshot = await docRef.get() //
+    const docSnapshot = await docRef.get() 
+
     if( docSnapshot.exists ) {
         return await docSnapshot.data()
     }else{
-        console.log('nothing to see')
         return null
     }
 }
 
-async function deleteOne(id) { //funkar!
+async function deleteOne(id) {
 
 	const docRef = db.collection(HAMSTERS).doc(id)
 	const docSnapshot = await docRef.get()
     if(docSnapshot.exists){
-        console.log('Document exists? ', docSnapshot.exists);
 	    return await docRef.delete()
     }else{
         return null
@@ -162,45 +154,31 @@ async function getCutest() {
         return []
     }
     
-        //räkna ut skillnad wins/losses per objekt i array resultat
-        let wins;
-        let cutest = [];
-        for (let i = 0; i < array.length; i++){ //loopa igenom array, ta ut obj till min array
+    let cutest = [];
+    for (let i = 0; i < array.length; i++){ //loopa igenom array, ta ut obj till min array
             
-            let wins = array[i].wins
-            let def = array[i].defeats
-            // console.log(def, wins)
+        let wins = array[i].wins
+        let def = array[i].defeats
+        let calcit = wins / def
+        let multi =  calcit * def
 
-            let calcit = wins / def
-            let multi =  calcit * def 
-            //console.log(calcit, multi)
-            if(isNaN(multi)) multi = 0; //omvandlar alla NaN till 0, om ex ej har vunnit/förlorat ngt
-            cutest[i] = multi; //returnera värde på wins i alla obj
+        if(isNaN(multi)) multi = 0; //omvandlar alla NaN till 0, om ex ej har vunnit/förlorat ngt
+        cutest[i] = multi; //returnera värde på wins i alla obj
     }
-        //console.log(cutest)
-        let finalResult = Math.max(...cutest) // får ut högsta talet här på wins.
-        //console.log(finalResult)
+
+    let finalResult = Math.max(...cutest) // får ut högsta talet här på wins.        
+    let winning = array.find(({wins}) => wins === finalResult) //hittar värde array som har samma värde som högst resultat
         
-        let winning = array.find(({wins}) => wins === finalResult) //hittar värde array som har samma värde som högst resultat
-        
-        if(winning){
-                console.log(wins)
-                return winning
-            }else{
-                console.log('can not find it')
-                return null
-                
-            }
+    if(winning){
+        return winning
+        }else{
+            return null       
+        }
 }
 
-
-
 async function addOne(item){
-        console.log('Add a new document...');
-        const object = item
-    
-        const docRef = await db.collection(HAMSTERS).add(object)
-        console.log('Added document with the id ' + docRef.id);
+    const object = item
+    await db.collection(HAMSTERS).add(object)
 }
 
 module.exports = router, getHamsters
