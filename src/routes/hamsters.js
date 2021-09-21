@@ -26,11 +26,17 @@ router.get('/cutest', async (req, res) =>{
 
 router.get('/:id', async (req, res)=>{ //Id
     const idHam = await getOneHamster(req.params.id) //får tillbaka id från funktionen
+    
+    let array = []
+
+    idHam === req.params.id
+    array.push(idHam)
+    
     if(!idHam){
         res.sendStatus(404)
         return
     }
-    res.sendStatus(200)    
+    res.status(200).send(idHam)    
 })
 
  router.put('/:id', async (req, res) =>{ 
@@ -50,9 +56,9 @@ router.delete('/:id', async (req, res) =>{
     let deleted = await deleteOne(req.params.id)
     if(!deleted ){
         res.sendStatus(404)
-        return
     }else{
         res.sendStatus(200)
+        return
     }    
 })
 
@@ -78,12 +84,12 @@ router.post('/', async (req, res) =>{
     let oneHamster = await getOneHamster(docRef.id)
     console.log(oneHamster)
 
-    let array = []
+    let arrayOne = []
 
   
     oneHamster.id = docRef.id
-    array.push(oneHamster)
-    console.log(array)
+    arrayOne.push(oneHamster)
+    console.log(arrayOne)
 
 
     if(!HamsterItem){               
@@ -156,8 +162,6 @@ async function deleteOne(id) {
     }else{
         return null
     }
-    
-	
 }
 
 async function getCutest() {
