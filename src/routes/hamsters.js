@@ -25,12 +25,18 @@ router.get('/cutest', async (req, res) =>{
 })
 
 router.get('/:id', async (req, res)=>{ //Id
-    const idUser = await getOneHamster(req.params.id) //får tillbaka id från funktionen
-    if(!idUser){
+    const idHam = await getOneHamster(req.params.id) //får tillbaka id från funktionen
+    
+    let array = []
+
+    idHam === req.params.id
+    array.push(idHam)
+    
+    if(!idHam){
         res.sendStatus(404)
         return
     }
-    res.sendStatus(200)    
+    res.status(200).send(idHam)    
 })
 
  router.put('/:id', async (req, res) =>{ 
@@ -50,9 +56,9 @@ router.delete('/:id', async (req, res) =>{
     let deleted = await deleteOne(req.params.id)
     if(!deleted ){
         res.sendStatus(404)
-        return
     }else{
         res.sendStatus(200)
+        return
     }    
 })
 
@@ -69,17 +75,30 @@ function checkHamster(item){
     return true
 
 }
-router.post('/', async (req, res) =>{
+router.post('/', async (req, res) =>{ 
     let item = req.body
     let HamsterItem = checkHamster(item)
+    let docRef = await db.collection(HAMSTERS).add(item)
+    console.log('added object to database w id:' + docRef.id )
+
+    let oneHamster = await getOneHamster(docRef.id)
+    console.log(oneHamster)
+
+    let arrayOne = []
+
+  
+    oneHamster.id = docRef.id
+    arrayOne.push(oneHamster)
+    console.log(arrayOne)
+
 
     if(!HamsterItem){               
         res.status(400).send('Must send a hamster object')
         return
         
     } else{
-        let newHamster = await addOne(item)
-        res.send(newHamster)
+        // console.log(fullHamster)
+        await res.send(oneHamster)
     }
     
 })
@@ -143,8 +162,6 @@ async function deleteOne(id) {
     }else{
         return null
     }
-    
-	
 }
 
 async function getCutest() {
@@ -176,9 +193,5 @@ async function getCutest() {
         }
 }
 
-async function addOne(item){
-    const object = item
-    await db.collection(HAMSTERS).add(object)
-}
 
 module.exports = router, getHamsters
