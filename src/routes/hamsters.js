@@ -40,16 +40,19 @@ router.get('/:id', async (req, res)=>{ //Id
 })
 
  router.put('/:id', async (req, res) =>{ 
-     let item = req.body
+     const item = req.body
      const updateArray = await HamsterObject(req.params.id,item)
 
-     if(!updateArray){
-         res.sendStatus(404)
-     } else{
-        res.sendStatus(200)
-        return
-     }
-     
+     if( Object.keys(req.body).length === 0 ){
+         res.sendStatus(400)
+     }else{
+         if( !updateArray ){
+            res.sendStatus(404)
+        } else{
+            res.sendStatus(200)
+            return
+        }
+     } 
 })
 
 router.delete('/:id', async (req, res) =>{ 
