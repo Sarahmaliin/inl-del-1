@@ -1,0 +1,35 @@
+*{
+    margin-block: unset;
+}
+
+body{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: url('https://images.unsplash.com/photo-1563291074-2bf8677ac0e5?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=651&q=80');
+    
+}
+
+main{
+    background-color: #ffffff80;
+    width: 80%;
+    height: 80vh;
+    margin-top: 20%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+
+h1{
+    display: flex;
+    justify-content: center;
+}
+
+#btnArea{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
