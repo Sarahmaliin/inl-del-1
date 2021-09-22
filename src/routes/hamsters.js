@@ -175,25 +175,54 @@ async function getCutest() {
     }
     
     let cutest = [];
-    for (let i = 0; i < array.length; i++){ //loopa igenom array, ta ut obj till min array
-            
+
+    for(let i = 0; i < array.length; i++){
+
+        let cute = {}
+
         let wins = array[i].wins
         let def = array[i].defeats
-        let calcit = wins / def
-        let multi =  calcit * def
+        let calcit = wins - def
+        let score =  calcit + def
 
-        if(isNaN(multi)) multi = 0; //omvandlar alla NaN till 0, om ex ej har vunnit/förlorat ngt
-        cutest[i] = multi; //returnera värde på wins i alla obj
+        if(isNaN(score)) score = 0; //omvandlar alla NaN till 0, om ex ej har vunnit/förlorat ngt
+
+        cute.score = score
+        cute.name = array[i].name
+        cute.age = array[i].age
+        cute.favFood = array[i].favFood
+        cute.loves = array[i].loves
+        cute.imgName = array[i].imgName
+        cute.wins = array[i].wins
+        cute.defeats = array[i].defeats
+        cute.games = array[i].games
+        cute.id = array[i].id
+        cutest.push(cute)
     }
 
-    let finalResult = Math.max(...cutest) // får ut högsta talet här på wins.        
-    let winning = array.find(({wins}) => wins === finalResult) //hittar värde array som har samma värde som högst resultat
-        
-    if(winning){
-        return winning
-        }else{
-            return null       
-        }
+const highestNumber = []
+     for (let i = 0; i < array.length; i++){ 
+            
+         let wins = array[i].wins
+         let def = array[i].defeats
+         let calcit = wins - def
+         let multi =  calcit + def
+
+         if(isNaN(multi)) multi = 0; //omvandlar alla NaN till 0, om ex ej har vunnit/förlorat ngt
+         highestNumber[i] = multi; //returnera värde på wins i alla obj
+     }
+
+     let finalResult = Math.max(...highestNumber) // får ut högsta talet här på wins.
+
+     let winning = cutest.filter(function(cutie) {
+         return cutie.score === finalResult
+     })
+
+     if(winning){
+         return winning
+         }else{
+             return null       
+         }
 }
 
 
