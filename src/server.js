@@ -1,7 +1,7 @@
 const express = require('express')
 const app = express()
 const cors = require('cors')
-const PORT = 5555;
+const PORT = process.env.PORT || 5555; //om heroku ger port anv den, om undefined anv vår egna port om kör på egen dator
 const hamsterRouter = require('./routes/hamsters.js')
 
 app.use(cors())
