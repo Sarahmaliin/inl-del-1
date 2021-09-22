@@ -4,7 +4,7 @@
   "description": "backend REST-Api node express",
   "main": "index.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node src/server.js"
   },
   "author": "Sarah Karlsson",
   "license": "ISC",
