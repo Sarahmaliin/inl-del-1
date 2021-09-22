@@ -1,8 +1,10 @@
 package-lock.json
-node_modules
-secrets/
+node_modules/git rm -r --cached
+
 .env
 DS_Store
+
+secrets/
 
 # Logs
 logs
