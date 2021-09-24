@@ -6,7 +6,7 @@ const connect = database.connect
 const db = connect()
 const HAMSTERS = 'hamsters'
 
-router.get('/', async (req, res) =>{ //array
+router.get('/', async (req, res) =>{ 
     let array = await getHamsters()
     res.send(array)
 })
@@ -24,8 +24,8 @@ router.get('/cutest', async (req, res) =>{
     res.send(cutestArray)
 })
 
-router.get('/:id', async (req, res)=>{ //Id
-    const idHam = await getOneHamster(req.params.id) //får tillbaka id från funktionen
+router.get('/:id', async (req, res)=>{ 
+    const idHam = await getOneHamster(req.params.id) 
     
     let array = []
 
@@ -100,7 +100,6 @@ router.post('/', async (req, res) =>{
         return
         
     } else{
-        // console.log(fullHamster)
         await res.send(oneHamster)
     }
     
