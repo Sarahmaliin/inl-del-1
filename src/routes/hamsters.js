@@ -127,17 +127,17 @@ async function HamsterObject(id, item){
  }
 
 async function getHamsters(){
-    const userRef = db.collection(HAMSTERS)
-    const userSnapshot = await userRef.get()
+    const HamsterRef = db.collection(HAMSTERS)
+    const HamsterSnapshot = await HamsterRef.get()
 
-    if(userSnapshot.empty) {
+    if(HamsterSnapshot.empty) {
         return []
     }
 
     const array = []
-    await userSnapshot.forEach(async docRef =>{
-        const data = await docRef.data()
-        data.id = docRef.id
+    await HamsterSnapshot.forEach(async HamsterRef =>{
+        const data = await HamsterRef.data()
+        data.id = HamsterRef.id
         array.push(data)
     })
     return array
